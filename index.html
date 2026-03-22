@@ -8,31 +8,38 @@
   <style>
     :root{
       --white:#ffffff;
-      --text:#d1d5db;
-      --muted:#9ca3af;
-      --muted2:#6b7280;
-      --purple:#a78bfa;
-      --purple2:#8b5cf6;
-      --purple3:#7c3aed;
-      --blue:#4f46e5;
-      --blue2:#3b82f6;
+      --text:#e5e7eb;
+      --muted:#b8bfd1;
+      --muted2:#a1a1aa;
+      --purple:#c4b5fd;
       --yellow:#facc15;
-      --border:rgba(139,92,246,0.15);
-      --cardbg:linear-gradient(145deg, rgba(139,92,246,0.08), rgba(59,130,246,0.05));
+
+      /* Nieuwe zichtbare paarse kaartstijl */
+      --cardbg:linear-gradient(145deg, rgba(58,30,92,0.92), rgba(40,24,74,0.9));
+      --cardborder:rgba(196,181,253,0.16);
+      --cardshadow:0 18px 40px rgba(24,12,44,0.26);
+
+      --pillbg:linear-gradient(135deg, rgba(139,92,246,0.18), rgba(99,102,241,0.16));
+      --tabborder:rgba(255,255,255,0.12);
+      --tabtext:#cbd5e1;
+      --tabactive:linear-gradient(135deg,#7c3aed,#4f46e5);
     }
 
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
+
+    html,body{
+      margin:0;
+      padding:0;
+      background:transparent;
+    }
+
     body{
-      min-height:100vh;
       color:var(--white);
       font-family:Inter,"Segoe UI",system-ui,sans-serif;
-      background:transparent;
     }
 
     .page{
       width:100%;
-      min-height:100vh;
       padding:0;
       background:transparent;
     }
@@ -48,7 +55,7 @@
       flex-wrap:wrap;
       justify-content:center;
       gap:12px;
-      margin:0 0 32px;
+      margin:0 0 28px;
     }
 
     .tab{
@@ -59,19 +66,21 @@
       font-size:14px;
       font-weight:600;
       transition:.25s ease;
-      color:#9ca3af;
-      background:transparent;
-      border:1px solid rgba(255,255,255,0.1);
+      color:var(--tabtext);
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--tabborder);
+      backdrop-filter:blur(8px);
     }
 
     .tab:hover{
       color:#fff;
       border-color:rgba(255,255,255,0.25);
+      transform:translateY(-1px);
     }
 
     .tab.active{
       color:#fff;
-      background:linear-gradient(135deg,#7c3aed,#4f46e5);
+      background:var(--tabactive);
       box-shadow:0 12px 30px rgba(168,85,247,.22);
       border-color:transparent;
     }
@@ -86,14 +95,15 @@
       border-radius:24px;
       padding:24px;
       background:var(--cardbg);
-      border:1px solid var(--border);
+      border:1px solid var(--cardborder);
+      box-shadow:var(--cardshadow);
       backdrop-filter:blur(10px);
       transition:transform .25s ease, box-shadow .25s ease;
     }
 
     .card:hover{
       transform:translateY(-4px);
-      box-shadow:0 18px 40px rgba(0,0,0,.18);
+      box-shadow:0 22px 48px rgba(24,12,44,0.34);
     }
 
     .card-top{
@@ -113,7 +123,7 @@
 
     .role{
       margin:0 0 3px;
-      color:#d8b4fe;
+      color:#ddd6fe;
       font-size:.92rem;
     }
 
@@ -128,6 +138,7 @@
       font-size:16px;
       letter-spacing:1px;
       color:var(--yellow);
+      flex-shrink:0;
     }
 
     .review-text{
@@ -143,14 +154,18 @@
       border-radius:999px;
       font-size:.78rem;
       font-weight:700;
-      background:linear-gradient(135deg, rgba(139,92,246,0.2), rgba(59,130,246,0.2));
+      background:var(--pillbg);
       color:var(--purple);
-      border:1px solid rgba(139,92,246,0.25);
+      border:1px solid rgba(196,181,253,0.18);
     }
 
     @media (max-width: 900px){
       .grid{
         grid-template-columns:1fr;
+      }
+
+      .tabs{
+        justify-content:flex-start;
       }
     }
   </style>
@@ -291,6 +306,22 @@
       return s;
     }
 
+    function sendHeight(){
+      const height = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight
+      );
+
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(
+          { type: "digibuur-reviews-resize", height },
+          "*"
+        );
+      }
+    }
+
     function renderTabs(){
       tabsEl.innerHTML = "";
       Object.keys(reviewsData).forEach((key) => {
@@ -322,10 +353,16 @@
           <div class="result">📈 ${review.result}</div>
         </div>
       `).join("");
+
+      requestAnimationFrame(sendHeight);
+      setTimeout(sendHeight, 120);
     }
 
     renderTabs();
     renderReviews();
+
+    window.addEventListener("load", sendHeight);
+    window.addEventListener("resize", sendHeight);
   </script>
 </body>
 </html>
