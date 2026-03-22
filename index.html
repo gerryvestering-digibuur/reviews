@@ -10,7 +10,6 @@
     :root{
       --white:#ffffff;
       --text:#ececf4;
-      --muted:#bfc5d6;
       --muted2:#9ca3af;
       --purple:#c4b5fd;
       --yellow:#facc15;
@@ -49,6 +48,7 @@
       margin:0;
       padding:0;
       background:transparent;
+      overflow:hidden;
     }
 
     .wrap{
@@ -81,12 +81,7 @@
       border:1px solid var(--tab-border);
       backdrop-filter:blur(10px);
       transition:all .22s ease;
-    }
-
-    .tab:hover{
-      color:#fff;
-      border-color:rgba(255,255,255,0.22);
-      transform:translateY(-1px);
+      max-width:100%;
     }
 
     .tab.active{
@@ -105,17 +100,14 @@
     }
 
     .card{
+      width:100%;
+      min-width:0;
       border-radius:22px;
       padding:22px;
       background:var(--card-bg);
       border:1px solid var(--card-border);
       box-shadow:var(--card-shadow);
-      transition:transform .22s ease, box-shadow .22s ease;
-    }
-
-    .card:hover{
-      transform:translateY(-3px);
-      box-shadow:0 22px 44px rgba(18,10,34,0.32);
+      overflow:hidden;
     }
 
     .card-top{
@@ -124,6 +116,12 @@
       justify-content:space-between;
       gap:14px;
       margin-bottom:14px;
+      min-width:0;
+    }
+
+    .card-meta{
+      min-width:0;
+      flex:1 1 auto;
     }
 
     .name{
@@ -131,18 +129,21 @@
       font-size:1.08rem;
       font-weight:700;
       color:#fff;
+      word-break:break-word;
     }
 
     .role{
       margin:0 0 3px 0;
       color:#ddd6fe;
       font-size:.92rem;
+      word-break:break-word;
     }
 
     .practice{
       margin:0;
       color:var(--muted2);
       font-size:.78rem;
+      word-break:break-word;
     }
 
     .stars{
@@ -150,7 +151,7 @@
       font-size:16px;
       letter-spacing:1px;
       color:var(--yellow);
-      flex-shrink:0;
+      flex:0 0 auto;
     }
 
     .review-text{
@@ -158,10 +159,12 @@
       color:var(--text);
       font-size:.95rem;
       line-height:1.72;
+      word-break:break-word;
     }
 
     .result{
       display:inline-block;
+      max-width:100%;
       padding:8px 12px;
       border-radius:999px;
       font-size:.78rem;
@@ -169,6 +172,7 @@
       background:var(--pill-bg);
       color:var(--purple);
       border:1px solid var(--pill-border);
+      word-break:break-word;
     }
 
     @media (max-width: 900px){
@@ -192,6 +196,15 @@
         padding:18px;
         border-radius:18px;
       }
+
+      .card-top{
+        flex-wrap:wrap;
+      }
+
+      .stars{
+        width:100%;
+        margin-top:2px;
+      }
     }
   </style>
 </head>
@@ -208,154 +221,63 @@
       fysio: {
         label: "Fysio & Medische Praktijken",
         reviews: [
-          {
-            name: "Dr. Marieke van den Berg",
-            role: "Fysiotherapeut",
-            practice: "FysioFit Amsterdam",
-            rating: 5,
-            text: "Sinds DigiBuur onze afsprakenplanning en patiëntcommunicatie heeft geautomatiseerd, besparen we wekelijks 12 uur aan administratie. Onze no-show rate is met 40% gedaald dankzij de slimme herinneringen.",
-            result: "40% minder no-shows"
-          },
-          {
-            name: "Jeroen Bolt",
-            role: "Praktijkhouder",
-            practice: "Medisch Centrum Oost",
-            rating: 5,
-            text: "De AI-receptionist van DigiBuur beantwoordt 80% van de telefoontjes zelfstandig. Patiënten zijn enthousiast en mijn team kan zich focussen op zorg in plaats van telefoonverkeer.",
-            result: "80% minder telefoondruk"
-          },
-          {
-            name: "Sandra de Rijck",
-            role: "Manueel Therapeut",
-            practice: "Praktijk De Groot",
-            rating: 4,
-            text: "Ik was sceptisch over AI, maar het intake-formulier en de automatische opvolging werken perfect. Nieuwe patiënten voelen zich meteen welkom en gehoord.",
-            result: "30% meer nieuwe patiënten"
-          },
-          {
-            name: "Tom Hendriks",
-            role: "Sportfysiotherapeut",
-            practice: "SportRevalidatie Friesland",
-            rating: 5,
-            text: "DigiBuur heeft een chatbot gebouwd die sporters direct advies geeft over blessurepreventie. Dit trekt nieuwe klanten aan én ontlast onze intake enorm.",
-            result: "25% groei in klantenbasis"
-          }
+          { name: "Dr. Marieke van den Berg", role: "Fysiotherapeut", practice: "FysioFit Amsterdam", rating: 5, text: "Sinds DigiBuur onze afsprakenplanning en patiëntcommunicatie heeft geautomatiseerd, besparen we wekelijks 12 uur aan administratie. Onze no-show rate is met 40% gedaald dankzij de slimme herinneringen.", result: "40% minder no-shows" },
+          { name: "Marnix Bolt", role: "Praktijkhouder", practice: "Medisch Centrum Oost", rating: 5, text: "De AI-receptionist van DigiBuur beantwoordt 80% van de telefoontjes zelfstandig. Patiënten zijn enthousiast en mijn team kan zich focussen op zorg in plaats van telefoonverkeer.", result: "80% minder telefoondruk" },
+          { name: "Sandra de Rijcker", role: "Manueel Therapeut", practice: "Praktijk De Groot", rating: 4, text: "Ik was sceptisch over AI, maar het intake-formulier en de automatische opvolging werken perfect. Nieuwe patiënten voelen zich meteen welkom en gehoord.", result: "30% meer nieuwe patiënten" },
+          { name: "Tom Hendriks", role: "Sportfysiotherapeut", practice: "SportRevalidatie Friesland", rating: 5, text: "DigiBuur heeft een chatbot gebouwd die sporters direct advies geeft over blessurepreventie. Dit trekt nieuwe klanten aan én ontlast onze intake enorm.", result: "25% groei in klantenbasis" }
         ]
       },
       tandarts: {
         label: "Tandarts & Mondzorg",
         reviews: [
-          {
-            name: "Dr. Fatima El Amrani",
-            role: "Tandarts",
-            practice: "Tandzorg Leeuwarden",
-            rating: 5,
-            text: "De geautomatiseerde herinnerings-flow van DigiBuur heeft onze no-show rate bijna geëlimineerd. Patiënten krijgen WhatsApp-herinneringen en kunnen met één klik bevestigen of verzetten.",
-            result: "90% minder no-shows"
-          },
-          {
-            name: "Peter Visser",
-            role: "Praktijkmanager",
-            practice: "Kliniek Visser Mondzorg",
-            rating: 5,
-            text: "Voorheen waren we 2 uur per dag kwijt aan het bellen van patiënten. Nu draait alles automatisch. De ROI was al in de eerste maand zichtbaar.",
-            result: "€2.500/maand bespaard"
-          },
-          {
-            name: "Lisa Jansen",
-            role: "Mondhygiënist",
-            practice: "Fresh Smile Studio",
-            rating: 4,
-            text: "De AI-content die DigiBuur voor onze social media maakt is verrassend goed. We krijgen nu wekelijks nieuwe aanmeldingen via Instagram zonder dat we zelf hoeven te posten.",
-            result: "3x meer social media leads"
-          },
-          {
-            name: "Dr. Wouter de Vries",
-            role: "Kaakchirurg",
-            practice: "MKA Kliniek Noord",
-            rating: 5,
-            text: "Het verwijsproces met huisartsen verliep altijd rommelig. DigiBuur heeft dit volledig gedigitaliseerd — verwijzingen komen nu gestructureerd binnen en worden direct verwerkt.",
-            result: "60% snellere verwijzingen"
-          }
+          { name: "Dr. Fatima El Amrani", role: "Tandarts", practice: "Tandzorg Leeuwarden", rating: 5, text: "De geautomatiseerde herinnerings-flow van DigiBuur heeft onze no-show rate bijna geëlimineerd. Patiënten krijgen WhatsApp-herinneringen en kunnen met één klik bevestigen of verzetten.", result: "90% minder no-shows" },
+          { name: "Peter Visser", role: "Praktijkmanager", practice: "Kliniek Visser Mondzorg", rating: 5, text: "Voorheen waren we 2 uur per dag kwijt aan het bellen van patiënten. Nu draait alles automatisch. De ROI was al in de eerste maand zichtbaar.", result: "€2.500/maand bespaard" },
+          { name: "Lisa Jansen", role: "Mondhygiënist", practice: "Fresh Smile Studio", rating: 4, text: "De AI-content die DigiBuur voor onze social media maakt is verrassend goed. We krijgen nu wekelijks nieuwe aanmeldingen via Instagram zonder dat we zelf hoeven te posten.", result: "3x meer social media leads" },
+          { name: "Dr. Wouter de Vries", role: "Kaakchirurg", practice: "MKA Kliniek Noord", rating: 5, text: "Het verwijsproces met huisartsen verliep altijd rommelig. DigiBuur heeft dit volledig gedigitaliseerd — verwijzingen komen nu gestructureerd binnen en worden direct verwerkt.", result: "60% snellere verwijzingen" }
         ]
       },
       beauty: {
         label: "Beauty & Med-Spa",
         reviews: [
-          {
-            name: "Nadia Rousseau",
-            role: "Eigenaar",
-            practice: "Glow Aesthetics",
-            rating: 5,
-            text: "DigiBuur heeft mijn complete boekingssysteem geautomatiseerd inclusief upselling van behandelingen. Mijn omzet is met 35% gestegen terwijl ik minder werk aan administratie.",
-            result: "35% omzetstijging"
-          },
-          {
-            name: "Kim van der Laan",
-            role: "Schoonheidsspecialist",
-            practice: "Pure Beauty Salon",
-            rating: 5,
-            text: "De follow-up berichten na behandelingen zijn een gamechanger. Klanten voelen zich speciaal en boeken sneller een vervolgafspraak. Mijn retentie is enorm verbeterd.",
-            result: "50% hogere klantretentie"
-          },
-          {
-            name: "Ilse Mulder",
-            role: "Med-Spa Directeur",
-            practice: "Radiance Med-Spa",
-            rating: 5,
-            text: "We gebruiken de AI-chatbot voor consultatie-aanvragen. Potentiële klanten krijgen direct antwoord op hun vragen over behandelingen, wat de drempel enorm verlaagt.",
-            result: "45% meer consultaties"
-          },
-          {
-            name: "Eva Kramer",
-            role: "Huidtherapeut",
-            practice: "Derma Glow Kliniek",
-            rating: 4,
-            text: "Het geautomatiseerde reviewverzoek na elke behandeling heeft ons Google-profiel een boost gegeven. We zijn van 3.8 naar 4.7 sterren gegaan in drie maanden.",
-            result: "Van 3.8 naar 4.7 sterren"
-          }
+          { name: "Nadia Rousseau", role: "Eigenaar", practice: "Glow Aesthetics", rating: 5, text: "DigiBuur heeft mijn complete boekingssysteem geautomatiseerd inclusief upselling van behandelingen. Mijn omzet is met 35% gestegen terwijl ik minder werk aan administratie.", result: "35% omzetstijging" },
+          { name: "Kim van der Laan", role: "Schoonheidsspecialist", practice: "Pure Beauty Salon", rating: 5, text: "De follow-up berichten na behandelingen zijn een gamechanger. Klanten voelen zich speciaal en boeken sneller een vervolgafspraak. Mijn retentie is enorm verbeterd.", result: "50% hogere klantretentie" },
+          { name: "Ilse Mulder", role: "Med-Spa Directeur", practice: "Radiance Med-Spa", rating: 5, text: "We gebruiken de AI-chatbot voor consultatie-aanvragen. Potentiële klanten krijgen direct antwoord op hun vragen over behandelingen, wat de drempel enorm verlaagt.", result: "45% meer consultaties" },
+          { name: "Eva Kramer", role: "Huidtherapeut", practice: "Derma Glow Kliniek", rating: 4, text: "Het geautomatiseerde reviewverzoek na elke behandeling heeft ons Google-profiel een boost gegeven. We zijn van 3.8 naar 4.7 sterren gegaan in drie maanden.", result: "Van 3.8 naar 4.7 sterren" }
         ]
       }
     };
 
     let activeNiche = "fysio";
-
     const tabsEl = document.getElementById("tabs");
     const gridEl = document.getElementById("reviewsGrid");
 
     function stars(rating){
       let s = "";
-      for(let i = 1; i <= 5; i++){
-        s += i <= rating ? "★" : "☆";
-      }
+      for(let i = 1; i <= 5; i++) s += i <= rating ? "★" : "☆";
       return s;
     }
 
     function renderTabs(){
       tabsEl.innerHTML = "";
-
       Object.keys(reviewsData).forEach((key) => {
         const btn = document.createElement("button");
         btn.className = "tab" + (key === activeNiche ? " active" : "");
         btn.textContent = reviewsData[key].label;
-
         btn.addEventListener("click", () => {
           activeNiche = key;
           renderTabs();
           renderReviews();
         });
-
         tabsEl.appendChild(btn);
       });
     }
 
     function renderReviews(){
       const data = reviewsData[activeNiche];
-
       gridEl.innerHTML = data.reviews.map((review) => `
         <div class="card">
           <div class="card-top">
-            <div>
+            <div class="card-meta">
               <h3 class="name">${review.name}</h3>
               <p class="role">${review.role}</p>
               <p class="practice">${review.practice}</p>
@@ -366,40 +288,39 @@
           <div class="result">📈 ${review.result}</div>
         </div>
       `).join("");
-
-      sendHeight();
+      pingHeight();
     }
 
-    function sendHeight(){
-      const height = Math.max(
-        document.body.scrollHeight,
+    function getHeight(){
+      return Math.max(
         document.documentElement.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.offsetHeight
+        document.body.scrollHeight,
+        document.documentElement.offsetHeight,
+        document.body.offsetHeight
       );
+    }
 
+    function pingHeight(){
+      const h = getHeight();
       if(window.parent && window.parent !== window){
-        window.parent.postMessage({
-          type: "digibuur-reviews-resize",
-          height: height
-        }, "*");
+        window.parent.postMessage({ type: "digibuur-reviews-resize", height: h }, "*");
       }
     }
 
     renderTabs();
     renderReviews();
 
-    window.addEventListener("load", sendHeight);
-    window.addEventListener("resize", sendHeight);
+    window.addEventListener("load", pingHeight);
+    window.addEventListener("resize", pingHeight);
+    window.addEventListener("orientationchange", () => setTimeout(pingHeight, 250));
 
     if("ResizeObserver" in window){
-      const ro = new ResizeObserver(() => sendHeight());
-      ro.observe(document.body);
+      new ResizeObserver(() => pingHeight()).observe(document.body);
     }
 
-    setTimeout(sendHeight, 100);
-    setTimeout(sendHeight, 300);
-    setTimeout(sendHeight, 700);
+    setTimeout(pingHeight, 100);
+    setTimeout(pingHeight, 400);
+    setTimeout(pingHeight, 900);
   </script>
 </body>
 </html>
