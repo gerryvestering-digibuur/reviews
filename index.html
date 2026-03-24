@@ -11,17 +11,19 @@
       --white:#ffffff;
       --text:#ececf4;
       --muted2:#9ca3af;
-      --purple:#c4b5fd;
+      --purple:#d6c8ff;
       --yellow:#facc15;
 
-      --tab-bg:rgba(255,255,255,0.04);
-      --tab-border:rgba(255,255,255,0.12);
-      --tab-text:#d8deee;
-      --tab-active:linear-gradient(135deg,#7c3aed,#4f46e5);
+      /* Buttons/tabs donkerder en duidelijker */
+      --tab-bg:rgba(28,18,52,0.82);
+      --tab-border:rgba(167,139,250,0.26);
+      --tab-text:#f2edff;
+      --tab-active:linear-gradient(135deg,#5b21b6,#4338ca);
 
-      --card-bg:linear-gradient(180deg, rgba(47,26,78,0.96) 0%, rgba(30,20,52,0.96) 100%);
-      --card-border:rgba(167,139,250,0.18);
-      --card-shadow:0 18px 40px rgba(18,10,34,0.24);
+      /* Kaarten iets netter / minder modderdonker */
+      --card-bg:linear-gradient(180deg, rgba(58,34,96,0.96) 0%, rgba(43,28,74,0.96) 100%);
+      --card-border:rgba(167,139,250,0.14);
+      --card-shadow:0 8px 20px rgba(10,10,18,0.10);
 
       --pill-bg:linear-gradient(135deg, rgba(124,58,237,0.18), rgba(79,70,229,0.18));
       --pill-border:rgba(196,181,253,0.18);
@@ -75,21 +77,29 @@
       padding:12px 18px;
       border-radius:999px;
       font-size:14px;
-      font-weight:600;
+      font-weight:700;
       line-height:1;
       color:var(--tab-text);
       background:var(--tab-bg);
       border:1px solid var(--tab-border);
       backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
       transition:all .22s ease;
       max-width:100%;
+      box-shadow:0 6px 18px rgba(8,8,18,0.16);
+    }
+
+    .tab:hover{
+      color:#fff;
+      border-color:rgba(255,255,255,0.20);
+      background:rgba(36,22,66,0.92);
     }
 
     .tab.active{
       color:#fff;
       background:var(--tab-active);
-      border-color:transparent;
-      box-shadow:0 12px 28px rgba(124,58,237,.24);
+      border-color:rgba(255,255,255,0.12);
+      box-shadow:0 10px 24px rgba(67,56,202,.24);
     }
 
     .grid{
@@ -191,6 +201,7 @@
       .tab{
         padding:11px 15px;
         font-size:13px;
+        font-weight:700;
       }
 
       .card{
@@ -208,18 +219,10 @@
       }
     }
   </style>
-
-  <script>
-    window.iframeResizer = {
-      targetOrigin: ['https://digibuur.nl'],
-      waitForLoad: true
-    };
-  </script>
-  <script async src="https://cdn.jsdelivr.net/npm/@iframe-resizer/child@5.5.9"></script>
 </head>
 <body>
   <div class="page">
-    <div class="wrap" id="wrap" data-iframe-size>
+    <div class="wrap" id="wrap">
       <div class="tabs" id="tabs"></div>
       <div class="grid" id="reviewsGrid"></div>
     </div>
@@ -230,28 +233,112 @@
       fysio: {
         label: "Fysio & Medische Praktijken",
         reviews: [
-          { name: "Dr. Marieke van den Berg", role: "Fysiotherapeut", practice: "FysioFit Amsterdam", rating: 5, text: "Sinds DigiBuur onze afsprakenplanning en patiëntcommunicatie heeft geautomatiseerd, besparen we wekelijks 12 uur aan administratie. Onze no-show rate is met 40% gedaald dankzij de slimme herinneringen.", result: "40% minder no-shows" },
-          { name: "Marnix Bolt", role: "Praktijkhouder", practice: "Medisch Centrum Oost", rating: 5, text: "De AI-receptionist van DigiBuur beantwoordt 80% van de telefoontjes zelfstandig. Patiënten zijn enthousiast en mijn team kan zich focussen op zorg in plaats van telefoonverkeer.", result: "80% minder telefoondruk" },
-          { name: "Sandra de Rijcker", role: "Manueel Therapeut", practice: "Praktijk De Groot", rating: 4, text: "Ik was sceptisch over AI, maar het intake-formulier en de automatische opvolging werken perfect. Nieuwe patiënten voelen zich meteen welkom en gehoord.", result: "30% meer nieuwe patiënten" },
-          { name: "Tom Hendriks", role: "Sportfysiotherapeut", practice: "SportRevalidatie Friesland", rating: 5, text: "DigiBuur heeft een chatbot gebouwd die sporters direct advies geeft over blessurepreventie. Dit trekt nieuwe klanten aan én ontlast onze intake enorm.", result: "25% groei in klantenbasis" }
+          {
+            name: "Dr. Marieke van den Berg",
+            role: "Fysiotherapeut",
+            practice: "FysioFit Amsterdam",
+            rating: 5,
+            text: "Sinds DigiBuur onze afsprakenplanning en patiëntcommunicatie heeft geautomatiseerd, besparen we wekelijks 12 uur aan administratie. Onze no-show rate is met 40% gedaald dankzij de slimme herinneringen.",
+            result: "40% minder no-shows"
+          },
+          {
+            name: "Marnix Bolt",
+            role: "Praktijkhouder",
+            practice: "Medisch Centrum Oost",
+            rating: 5,
+            text: "De AI-receptionist van DigiBuur beantwoordt 80% van de telefoontjes zelfstandig. Patiënten zijn enthousiast en mijn team kan zich focussen op zorg in plaats van telefoonverkeer.",
+            result: "80% minder telefoondruk"
+          },
+          {
+            name: "Sandra de Rijcker",
+            role: "Manueel Therapeut",
+            practice: "Praktijk De Groot",
+            rating: 4,
+            text: "Ik was sceptisch over AI, maar het intake-formulier en de automatische opvolging werken perfect. Nieuwe patiënten voelen zich meteen welkom en gehoord.",
+            result: "30% meer nieuwe patiënten"
+          },
+          {
+            name: "Tom Hendriks",
+            role: "Sportfysiotherapeut",
+            practice: "SportRevalidatie Friesland",
+            rating: 5,
+            text: "DigiBuur heeft een chatbot gebouwd die sporters direct advies geeft over blessurepreventie. Dit trekt nieuwe klanten aan én ontlast onze intake enorm.",
+            result: "25% groei in klantenbasis"
+          }
         ]
       },
       tandarts: {
         label: "Tandarts & Mondzorg",
         reviews: [
-          { name: "Dr. Fatima El Amrani", role: "Tandarts", practice: "Tandzorg Leeuwarden", rating: 5, text: "De geautomatiseerde herinnerings-flow van DigiBuur heeft onze no-show rate bijna geëlimineerd. Patiënten krijgen WhatsApp-herinneringen en kunnen met één klik bevestigen of verzetten.", result: "90% minder no-shows" },
-          { name: "Peter Visser", role: "Praktijkmanager", practice: "Kliniek Visser Mondzorg", rating: 5, text: "Voorheen waren we 2 uur per dag kwijt aan het bellen van patiënten. Nu draait alles automatisch. De ROI was al in de eerste maand zichtbaar.", result: "€2.500/maand bespaard" },
-          { name: "Lisa Jansen", role: "Mondhygiënist", practice: "Fresh Smile Studio", rating: 4, text: "De AI-content die DigiBuur voor onze social media maakt is verrassend goed. We krijgen nu wekelijks nieuwe aanmeldingen via Instagram zonder dat we zelf hoeven te posten.", result: "3x meer social media leads" },
-          { name: "Dr. Wouter de Vries", role: "Kaakchirurg", practice: "MKA Kliniek Noord", rating: 5, text: "Het verwijsproces met huisartsen verliep altijd rommelig. DigiBuur heeft dit volledig gedigitaliseerd — verwijzingen komen nu gestructureerd binnen en worden direct verwerkt.", result: "60% snellere verwijzingen" }
+          {
+            name: "Dr. Fatima El Amrani",
+            role: "Tandarts",
+            practice: "Tandzorg Leeuwarden",
+            rating: 5,
+            text: "De geautomatiseerde herinnerings-flow van DigiBuur heeft onze no-show rate bijna geëlimineerd. Patiënten krijgen WhatsApp-herinneringen en kunnen met één klik bevestigen of verzetten.",
+            result: "90% minder no-shows"
+          },
+          {
+            name: "Peter Visser",
+            role: "Praktijkmanager",
+            practice: "Kliniek Visser Mondzorg",
+            rating: 5,
+            text: "Voorheen waren we 2 uur per dag kwijt aan het bellen van patiënten. Nu draait alles automatisch. De ROI was al in de eerste maand zichtbaar.",
+            result: "€2.500/maand bespaard"
+          },
+          {
+            name: "Lisa Jansen",
+            role: "Mondhygiënist",
+            practice: "Fresh Smile Studio",
+            rating: 4,
+            text: "De AI-content die DigiBuur voor onze social media maakt is verrassend goed. We krijgen nu wekelijks nieuwe aanmeldingen via Instagram zonder dat we zelf hoeven te posten.",
+            result: "3x meer social media leads"
+          },
+          {
+            name: "Dr. Wouter de Vries",
+            role: "Kaakchirurg",
+            practice: "MKA Kliniek Noord",
+            rating: 5,
+            text: "Het verwijsproces met huisartsen verliep altijd rommelig. DigiBuur heeft dit volledig gedigitaliseerd — verwijzingen komen nu gestructureerd binnen en worden direct verwerkt.",
+            result: "60% snellere verwijzingen"
+          }
         ]
       },
       beauty: {
         label: "Beauty & Med-Spa",
         reviews: [
-          { name: "Nadia Rousseau", role: "Eigenaar", practice: "Glow Aesthetics", rating: 5, text: "DigiBuur heeft mijn complete boekingssysteem geautomatiseerd inclusief upselling van behandelingen. Mijn omzet is met 35% gestegen terwijl ik minder werk aan administratie.", result: "35% omzetstijging" },
-          { name: "Kim van der Laan", role: "Schoonheidsspecialist", practice: "Pure Beauty Salon", rating: 5, text: "De follow-up berichten na behandelingen zijn een gamechanger. Klanten voelen zich speciaal en boeken sneller een vervolgafspraak. Mijn retentie is enorm verbeterd.", result: "50% hogere klantretentie" },
-          { name: "Ilse Mulder", role: "Med-Spa Directeur", practice: "Radiance Med-Spa", rating: 5, text: "We gebruiken de AI-chatbot voor consultatie-aanvragen. Potentiële klanten krijgen direct antwoord op hun vragen over behandelingen, wat de drempel enorm verlaagt.", result: "45% meer consultaties" },
-          { name: "Eva Kramer", role: "Huidtherapeut", practice: "Derma Glow Kliniek", rating: 4, text: "Het geautomatiseerde reviewverzoek na elke behandeling heeft ons Google-profiel een boost gegeven. We zijn van 3.8 naar 4.7 sterren gegaan in drie maanden.", result: "Van 3.8 naar 4.7 sterren" }
+          {
+            name: "Nadia Rousseau",
+            role: "Eigenaar",
+            practice: "Glow Aesthetics",
+            rating: 5,
+            text: "DigiBuur heeft mijn complete boekingssysteem geautomatiseerd inclusief upselling van behandelingen. Mijn omzet is met 35% gestegen terwijl ik minder werk aan administratie.",
+            result: "35% omzetstijging"
+          },
+          {
+            name: "Kim van der Laan",
+            role: "Schoonheidsspecialist",
+            practice: "Pure Beauty Salon",
+            rating: 5,
+            text: "De follow-up berichten na behandelingen zijn een gamechanger. Klanten voelen zich speciaal en boeken sneller een vervolgafspraak. Mijn retentie is enorm verbeterd.",
+            result: "50% hogere klantretentie"
+          },
+          {
+            name: "Ilse Mulder",
+            role: "Med-Spa Directeur",
+            practice: "Radiance Med-Spa",
+            rating: 5,
+            text: "We gebruiken de AI-chatbot voor consultatie-aanvragen. Potentiële klanten krijgen direct antwoord op hun vragen over behandelingen, wat de drempel enorm verlaagt.",
+            result: "45% meer consultaties"
+          },
+          {
+            name: "Eva Kramer",
+            role: "Huidtherapeut",
+            practice: "Derma Glow Kliniek",
+            rating: 4,
+            text: "Het geautomatiseerde reviewverzoek na elke behandeling heeft ons Google-profiel een boost gegeven. We zijn van 3.8 naar 4.7 sterren gegaan in drie maanden.",
+            result: "Van 3.8 naar 4.7 sterren"
+          }
         ]
       }
     };
@@ -276,10 +363,6 @@
           activeNiche = key;
           renderTabs();
           renderReviews();
-          if (window.parentIFrame) {
-            setTimeout(() => window.parentIFrame.size(), 50);
-            setTimeout(() => window.parentIFrame.size(), 250);
-          }
         });
         tabsEl.appendChild(btn);
       });
