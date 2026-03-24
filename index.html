@@ -208,10 +208,18 @@
       }
     }
   </style>
+
+  <script>
+    window.iframeResizer = {
+      targetOrigin: ['https://digibuur.nl'],
+      waitForLoad: true
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/@iframe-resizer/child@5.5.9"></script>
 </head>
 <body>
   <div class="page">
-    <div class="wrap" id="wrap">
+    <div class="wrap" id="wrap" data-iframe-size>
       <div class="tabs" id="tabs"></div>
       <div class="grid" id="reviewsGrid"></div>
     </div>
@@ -268,6 +276,10 @@
           activeNiche = key;
           renderTabs();
           renderReviews();
+          if (window.parentIFrame) {
+            setTimeout(() => window.parentIFrame.size(), 50);
+            setTimeout(() => window.parentIFrame.size(), 250);
+          }
         });
         tabsEl.appendChild(btn);
       });
@@ -289,69 +301,10 @@
           <div class="result">📈 ${review.result}</div>
         </div>
       `).join("");
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(sendHeight);
-      });
-    }
-
-    function getDocHeight(){
-      const body = document.body;
-      const html = document.documentElement;
-      return Math.max(
-        body.scrollHeight,
-        body.offsetHeight,
-        html.clientHeight,
-        html.scrollHeight,
-        html.offsetHeight
-      );
-    }
-
-    function sendHeight(){
-      const h = getDocHeight();
-      if (window.parent && window.parent !== window && h > 0) {
-        window.parent.postMessage({
-          type: "digibuur-reviews-resize",
-          height: h
-        }, "*");
-      }
     }
 
     renderTabs();
     renderReviews();
-
-    window.addEventListener("load", sendHeight);
-    window.addEventListener("resize", sendHeight);
-    window.addEventListener("orientationchange", function(){
-      setTimeout(sendHeight, 250);
-      setTimeout(sendHeight, 700);
-    });
-
-    window.addEventListener("message", function(e){
-      if (e.data && e.data.type === "digibuur-reviews-request-height") {
-        sendHeight();
-      }
-    });
-
-    if ("ResizeObserver" in window) {
-      const ro = new ResizeObserver(function(){
-        sendHeight();
-      });
-      ro.observe(document.body);
-      ro.observe(document.documentElement);
-    }
-
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function(){
-        sendHeight();
-      });
-    }
-
-    setTimeout(sendHeight, 100);
-    setTimeout(sendHeight, 300);
-    setTimeout(sendHeight, 700);
-    setTimeout(sendHeight, 1200);
-    setTimeout(sendHeight, 1800);
   </script>
 </body>
 </html>
