@@ -36,7 +36,6 @@
       padding:0;
       background:transparent;
       overflow-x:hidden;
-      /* Voorkom dat body groter wordt dan content */
       height:auto;
     }
 
@@ -294,26 +293,29 @@
       pingHeight();
     }
 
-    /* ── Meet alleen de daadwerkelijke wrap-hoogte, geen phantom whitespace ── */
     function getHeight(){
-      if(wrapEl){
-        var rect = wrapEl.getBoundingClientRect();
-        return Math.ceil(rect.bottom + window.scrollY) + 10;
-      }
-      return Math.max(
-        document.documentElement.scrollHeight,
-        document.body.scrollHeight
-      );
+      if (!wrapEl) return 0;
+      return Math.ceil(Math.max(
+        wrapEl.scrollHeight,
+        wrapEl.offsetHeight,
+        wrapEl.getBoundingClientRect().height
+      ));
     }
 
-    /* ── Stuur hoogte na volledige layout-pass ── */
+    function sendHeight(){
+      const h = getHeight();
+      if(window.parent && window.parent !== window && h > 0){
+        window.parent.postMessage({
+          type: "digibuur-reviews-resize",
+          height: h
+        }, "*");
+      }
+    }
+
     function pingHeight(){
       requestAnimationFrame(function(){
         requestAnimationFrame(function(){
-          var h = getHeight();
-          if(window.parent && window.parent !== window){
-            window.parent.postMessage({ type: "digibuur-reviews-resize", height: h }, "*");
-          }
+          sendHeight();
         });
       });
     }
@@ -323,16 +325,34 @@
 
     window.addEventListener("load", pingHeight);
     window.addEventListener("resize", pingHeight);
-    window.addEventListener("orientationchange", function(){ setTimeout(pingHeight, 300); });
+    window.addEventListener("orientationchange", function(){
+      setTimeout(pingHeight, 250);
+      setTimeout(pingHeight, 600);
+    });
 
-    if("ResizeObserver" in window){
-      new ResizeObserver(function(){ pingHeight(); }).observe(wrapEl || document.body);
+    window.addEventListener("message", function(e){
+      if (e.data && e.data.type === "digibuur-reviews-request-height") {
+        pingHeight();
+      }
+    });
+
+    if ("ResizeObserver" in window) {
+      const ro = new ResizeObserver(function(){
+        pingHeight();
+      });
+      ro.observe(wrapEl);
     }
 
-    /* Fallback timers voor trage renderers */
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function(){
+        pingHeight();
+      });
+    }
+
     setTimeout(pingHeight, 100);
     setTimeout(pingHeight, 400);
     setTimeout(pingHeight, 900);
+    setTimeout(pingHeight, 1500);
   </script>
 </body>
 </html>
