@@ -1,1 +1,394 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigiBuur Reviews</title>
+  <meta name="description" content="Experiences of business owners with DigiBuur AI automation." />
+
+  <style>
+    :root{
+      --white:#ffffff;
+      --text:#ececf4;
+      --muted2:#9ca3af;
+      --purple:#d6c8ff;
+      --yellow:#facc15;
+
+      /* Darker and clearer buttons/tabs */
+      --tab-bg:rgba(28,18,52,0.82);
+      --tab-border:rgba(167,139,250,0.26);
+      --tab-text:#f2edff;
+      --tab-active:linear-gradient(135deg,#5b21b6,#4338ca);
+
+      /* Cleaner cards / less muddy dark tone */
+      --card-bg:linear-gradient(180deg, rgba(58,34,96,0.96) 0%, rgba(43,28,74,0.96) 100%);
+      --card-border:rgba(167,139,250,0.14);
+      --card-shadow:0 8px 20px rgba(10,10,18,0.10);
+
+      --pill-bg:linear-gradient(135deg, rgba(124,58,237,0.18), rgba(79,70,229,0.18));
+      --pill-border:rgba(196,181,253,0.18);
+    }
+
+    *{
+      box-sizing:border-box;
+      min-width:0;
+    }
+
+    html, body{
+      margin:0;
+      padding:0;
+      background:transparent;
+      overflow-x:hidden;
+      height:auto;
+    }
+
+    body{
+      color:var(--white);
+      font-family:Inter, "Segoe UI", system-ui, sans-serif;
+    }
+
+    .page{
+      width:100%;
+      margin:0;
+      padding:0;
+      background:transparent;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:1200px;
+      margin:0 auto;
+      padding:0;
+    }
+
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:12px;
+      margin:0 0 20px 0;
+      padding:0;
+    }
+
+    .tab{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      padding:12px 18px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:700;
+      line-height:1;
+      color:#efeaff;
+      background:rgba(78,50,128,0.58);
+      border:1px solid rgba(167,139,250,0.22);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      transition:all .22s ease;
+      max-width:100%;
+      box-shadow:0 6px 16px rgba(18,10,34,0.10);
+    }
+
+    .tab:hover{
+      color:#fff;
+      background:rgba(88,58,142,0.68);
+      border-color:rgba(167,139,250,0.28);
+    }
+
+    .tab.active{
+      color:#fff;
+      background:linear-gradient(135deg,#6d28d9,#4f46e5);
+      border-color:rgba(255,255,255,0.14);
+      box-shadow:0 10px 22px rgba(67,56,202,.18);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:18px;
+      margin:0;
+      padding:0;
+    }
+
+    .card{
+      width:100%;
+      min-width:0;
+      border-radius:22px;
+      padding:22px;
+      background:var(--card-bg);
+      border:1px solid var(--card-border);
+      box-shadow:var(--card-shadow);
+      overflow:hidden;
+    }
+
+    .card-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom:14px;
+      min-width:0;
+    }
+
+    .card-meta{
+      min-width:0;
+      flex:1 1 auto;
+    }
+
+    .name{
+      margin:0 0 4px 0;
+      font-size:1.08rem;
+      font-weight:700;
+      color:#fff;
+      word-break:break-word;
+    }
+
+    .role{
+      margin:0 0 3px 0;
+      color:#ddd6fe;
+      font-size:.92rem;
+      word-break:break-word;
+    }
+
+    .practice{
+      margin:0;
+      color:var(--muted2);
+      font-size:.78rem;
+      word-break:break-word;
+    }
+
+    .stars{
+      white-space:nowrap;
+      font-size:16px;
+      letter-spacing:1px;
+      color:var(--yellow);
+      flex:0 0 auto;
+    }
+
+    .review-text{
+      margin:0 0 16px 0;
+      color:var(--text);
+      font-size:.95rem;
+      line-height:1.72;
+      word-break:break-word;
+    }
+
+    .result{
+      display:inline-block;
+      max-width:100%;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.78rem;
+      font-weight:700;
+      background:var(--pill-bg);
+      color:var(--purple);
+      border:1px solid var(--pill-border);
+      word-break:break-word;
+    }
+
+    @media (max-width: 900px){
+      .grid{
+        grid-template-columns:1fr;
+        gap:16px;
+      }
+
+      .tabs{
+        justify-content:flex-start;
+        gap:10px;
+        margin-bottom:16px;
+      }
+
+      .tab{
+        padding:11px 15px;
+        font-size:13px;
+        font-weight:700;
+      }
+
+      .card{
+        padding:18px;
+        border-radius:18px;
+      }
+
+      .card-top{
+        flex-wrap:wrap;
+      }
+
+      .stars{
+        width:100%;
+        margin-top:2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="wrap" id="wrap">
+      <div class="tabs" id="tabs"></div>
+      <div class="grid" id="reviewsGrid"></div>
+    </div>
+  </div>
+
+  <script>
+    const reviewsData = {
+      physio: {
+        label: "Physio & Medical Practices",
+        reviews: [
+          {
+            name: "Dr. Marieke van den Berg",
+            role: "Physiotherapist",
+            practice: "FysioFit Amsterdam",
+            rating: 5,
+            text: "Since DigiBuur automated our appointment scheduling and patient communication, we save 12 hours of admin work every week. Our no-show rate has dropped by 40% thanks to smart reminders.",
+            result: "40% fewer no-shows"
+          },
+          {
+            name: "Marnix Bolt",
+            role: "Practice Owner",
+            practice: "Medical Center East",
+            rating: 5,
+            text: "DigiBuur’s AI receptionist handles 80% of our phone calls independently. Patients are enthusiastic, and my team can focus on care instead of constant phone traffic.",
+            result: "80% less phone pressure"
+          },
+          {
+            name: "Sandra de Rijcker",
+            role: "Manual Therapist",
+            practice: "Practice De Groot",
+            rating: 4,
+            text: "I was skeptical about AI, but the intake form and automatic follow-up work perfectly. New patients immediately feel welcome and heard.",
+            result: "30% more new patients"
+          },
+          {
+            name: "Tom Hendriks",
+            role: "Sports Physiotherapist",
+            practice: "Sport Rehabilitation Friesland",
+            rating: 5,
+            text: "DigiBuur built a chatbot that gives athletes instant advice on injury prevention. It attracts new clients and takes a huge load off our intake process.",
+            result: "25% growth in client base"
+          }
+        ]
+      },
+      dentist: {
+        label: "Dentists & Oral Care",
+        reviews: [
+          {
+            name: "Dr. Fatima El Amrani",
+            role: "Dentist",
+            practice: "Dental Care Leeuwarden",
+            rating: 5,
+            text: "DigiBuur’s automated reminder flow has almost eliminated our no-show rate. Patients receive WhatsApp reminders and can confirm or reschedule with one click.",
+            result: "90% fewer no-shows"
+          },
+          {
+            name: "Peter Visser",
+            role: "Practice Manager",
+            practice: "Visser Oral Care Clinic",
+            rating: 5,
+            text: "We used to spend 2 hours a day calling patients. Now everything runs automatically. The ROI was visible in the very first month.",
+            result: "€2,500/month saved"
+          },
+          {
+            name: "Lisa Jansen",
+            role: "Dental Hygienist",
+            practice: "Fresh Smile Studio",
+            rating: 4,
+            text: "The AI content DigiBuur creates for our social media is surprisingly good. We now get new sign-ups every week through Instagram without having to post ourselves.",
+            result: "3x more social media leads"
+          },
+          {
+            name: "Dr. Wouter de Vries",
+            role: "Oral Surgeon",
+            practice: "MKA Clinic North",
+            rating: 5,
+            text: "Our referral process with general practitioners used to be messy. DigiBuur fully digitized it — referrals now come in structured and are processed immediately.",
+            result: "60% faster referrals"
+          }
+        ]
+      },
+      beauty: {
+        label: "Beauty & Med Spa",
+        reviews: [
+          {
+            name: "Nadia Rousseau",
+            role: "Owner",
+            practice: "Glow Aesthetics",
+            rating: 5,
+            text: "DigiBuur automated my entire booking system, including upselling treatments. My revenue increased by 35% while I spend less time on admin work.",
+            result: "35% revenue growth"
+          },
+          {
+            name: "Kim van der Laan",
+            role: "Beauty Specialist",
+            practice: "Pure Beauty Salon",
+            rating: 5,
+            text: "The follow-up messages after treatments are a gamechanger. Clients feel special and book their next appointment faster. My retention has improved enormously.",
+            result: "50% higher client retention"
+          },
+          {
+            name: "Ilse Mulder",
+            role: "Med Spa Director",
+            practice: "Radiance Med Spa",
+            rating: 5,
+            text: "We use the AI chatbot for consultation requests. Potential clients get instant answers to their treatment questions, which lowers the barrier significantly.",
+            result: "45% more consultations"
+          },
+          {
+            name: "Eva Kramer",
+            role: "Skin Therapist",
+            practice: "Derma Glow Clinic",
+            rating: 4,
+            text: "The automated review request after every treatment gave our Google profile a real boost. We went from 3.8 to 4.7 stars in three months.",
+            result: "From 3.8 to 4.7 stars"
+          }
+        ]
+      }
+    };
+
+    let activeNiche = "physio";
+    const tabsEl = document.getElementById("tabs");
+    const gridEl = document.getElementById("reviewsGrid");
+
+    function stars(rating){
+      let s = "";
+      for(let i = 1; i <= 5; i++) s += i <= rating ? "★" : "☆";
+      return s;
+    }
+
+    function renderTabs(){
+      tabsEl.innerHTML = "";
+      Object.keys(reviewsData).forEach((key) => {
+        const btn = document.createElement("button");
+        btn.className = "tab" + (key === activeNiche ? " active" : "");
+        btn.textContent = reviewsData[key].label;
+        btn.addEventListener("click", () => {
+          activeNiche = key;
+          renderTabs();
+          renderReviews();
+        });
+        tabsEl.appendChild(btn);
+      });
+    }
+
+    function renderReviews(){
+      const data = reviewsData[activeNiche];
+      gridEl.innerHTML = data.reviews.map((review) => `
+        <div class="card">
+          <div class="card-top">
+            <div class="card-meta">
+              <h3 class="name">${review.name}</h3>
+              <p class="role">${review.role}</p>
+              <p class="practice">${review.practice}</p>
+            </div>
+            <div class="stars" aria-label="${review.rating} out of 5 stars">${stars(review.rating)}</div>
+          </div>
+          <p class="review-text">"${review.text}"</p>
+          <div class="result">📈 ${review.result}</div>
+        </div>
+      `).join("");
+    }
+
+    renderTabs();
+    renderReviews();
+  </script>
+</body>
+</html>
