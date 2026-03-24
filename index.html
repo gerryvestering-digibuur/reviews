@@ -29,6 +29,7 @@
 
     *{
       box-sizing:border-box;
+      min-width:0;
     }
 
     html, body{
@@ -49,7 +50,6 @@
       margin:0;
       padding:0;
       background:transparent;
-      overflow:hidden;
     }
 
     .wrap{
@@ -251,7 +251,6 @@
     let activeNiche = "fysio";
     const tabsEl = document.getElementById("tabs");
     const gridEl = document.getElementById("reviewsGrid");
-    const wrapEl = document.getElementById("wrap");
 
     function stars(rating){
       let s = "";
@@ -290,21 +289,27 @@
           <div class="result">📈 ${review.result}</div>
         </div>
       `).join("");
-      pingHeight();
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(sendHeight);
+      });
     }
 
-    function getHeight(){
-      if (!wrapEl) return 0;
-      return Math.ceil(Math.max(
-        wrapEl.scrollHeight,
-        wrapEl.offsetHeight,
-        wrapEl.getBoundingClientRect().height
-      ));
+    function getDocHeight(){
+      const body = document.body;
+      const html = document.documentElement;
+      return Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
     }
 
     function sendHeight(){
-      const h = getHeight();
-      if(window.parent && window.parent !== window && h > 0){
+      const h = getDocHeight();
+      if (window.parent && window.parent !== window && h > 0) {
         window.parent.postMessage({
           type: "digibuur-reviews-resize",
           height: h
@@ -312,47 +317,41 @@
       }
     }
 
-    function pingHeight(){
-      requestAnimationFrame(function(){
-        requestAnimationFrame(function(){
-          sendHeight();
-        });
-      });
-    }
-
     renderTabs();
     renderReviews();
 
-    window.addEventListener("load", pingHeight);
-    window.addEventListener("resize", pingHeight);
+    window.addEventListener("load", sendHeight);
+    window.addEventListener("resize", sendHeight);
     window.addEventListener("orientationchange", function(){
-      setTimeout(pingHeight, 250);
-      setTimeout(pingHeight, 600);
+      setTimeout(sendHeight, 250);
+      setTimeout(sendHeight, 700);
     });
 
     window.addEventListener("message", function(e){
       if (e.data && e.data.type === "digibuur-reviews-request-height") {
-        pingHeight();
+        sendHeight();
       }
     });
 
     if ("ResizeObserver" in window) {
       const ro = new ResizeObserver(function(){
-        pingHeight();
+        sendHeight();
       });
-      ro.observe(wrapEl);
+      ro.observe(document.body);
+      ro.observe(document.documentElement);
     }
 
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function(){
-        pingHeight();
+        sendHeight();
       });
     }
 
-    setTimeout(pingHeight, 100);
-    setTimeout(pingHeight, 400);
-    setTimeout(pingHeight, 900);
-    setTimeout(pingHeight, 1500);
+    setTimeout(sendHeight, 100);
+    setTimeout(sendHeight, 300);
+    setTimeout(sendHeight, 700);
+    setTimeout(sendHeight, 1200);
+    setTimeout(sendHeight, 1800);
   </script>
 </body>
 </html>
