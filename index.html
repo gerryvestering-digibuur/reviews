@@ -36,6 +36,8 @@
       padding:0;
       background:transparent;
       overflow-x:hidden;
+      /* Voorkom dat body groter wordt dan content */
+      height:auto;
     }
 
     body{
@@ -210,7 +212,7 @@
 </head>
 <body>
   <div class="page">
-    <div class="wrap">
+    <div class="wrap" id="wrap">
       <div class="tabs" id="tabs"></div>
       <div class="grid" id="reviewsGrid"></div>
     </div>
@@ -250,6 +252,7 @@
     let activeNiche = "fysio";
     const tabsEl = document.getElementById("tabs");
     const gridEl = document.getElementById("reviewsGrid");
+    const wrapEl = document.getElementById("wrap");
 
     function stars(rating){
       let s = "";
@@ -291,20 +294,28 @@
       pingHeight();
     }
 
+    /* ── Meet alleen de daadwerkelijke wrap-hoogte, geen phantom whitespace ── */
     function getHeight(){
+      if(wrapEl){
+        var rect = wrapEl.getBoundingClientRect();
+        return Math.ceil(rect.bottom + window.scrollY) + 10;
+      }
       return Math.max(
         document.documentElement.scrollHeight,
-        document.body.scrollHeight,
-        document.documentElement.offsetHeight,
-        document.body.offsetHeight
+        document.body.scrollHeight
       );
     }
 
+    /* ── Stuur hoogte na volledige layout-pass ── */
     function pingHeight(){
-      const h = getHeight();
-      if(window.parent && window.parent !== window){
-        window.parent.postMessage({ type: "digibuur-reviews-resize", height: h }, "*");
-      }
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          var h = getHeight();
+          if(window.parent && window.parent !== window){
+            window.parent.postMessage({ type: "digibuur-reviews-resize", height: h }, "*");
+          }
+        });
+      });
     }
 
     renderTabs();
@@ -312,12 +323,13 @@
 
     window.addEventListener("load", pingHeight);
     window.addEventListener("resize", pingHeight);
-    window.addEventListener("orientationchange", () => setTimeout(pingHeight, 250));
+    window.addEventListener("orientationchange", function(){ setTimeout(pingHeight, 300); });
 
     if("ResizeObserver" in window){
-      new ResizeObserver(() => pingHeight()).observe(document.body);
+      new ResizeObserver(function(){ pingHeight(); }).observe(wrapEl || document.body);
     }
 
+    /* Fallback timers voor trage renderers */
     setTimeout(pingHeight, 100);
     setTimeout(pingHeight, 400);
     setTimeout(pingHeight, 900);
